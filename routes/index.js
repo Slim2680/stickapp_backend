@@ -12,12 +12,12 @@ router.post('/sign-up', async (req, res, next) => {
   var saveUser = null;
   var token = null;
 
-  console.log('/////error', error);
-  console.log('/////result', result);
-  console.log('/////saveUser', saveUser);
-  console.log('/////token', token);
-  console.log('/////req.body= ', req.body);
-  console.log('/////req.body.email= ', req.body.email);
+  // console.log('/////error', error);
+  // console.log('/////result', result);
+  // console.log('/////saveUser', saveUser);
+  // console.log('/////token', token);
+  // console.log('/////req.body= ', req.body);
+  // console.log('/////req.body.email= ', req.body.email);
 
   const data = await userModel.findOne({
     email: req.body.emailFromFront,
@@ -68,6 +68,8 @@ router.post('/log-in', async (req, res, next) => {
     error.push('champs vides');
   }
 
+  console.log('-----ERROR', error);
+
   // if(error.length == 0){
   //   user = await userModel.findOne({
   //     email: req.body.emailFromFront,
@@ -82,26 +84,31 @@ router.post('/log-in', async (req, res, next) => {
   //       error.push('mot de passe incorrect')
   //     }
 
-  //   } else {
-  //     error.push('email incorrect')
-  //   }
+  // } else {
+  //   error.push('email incorrect')
+  // }
   // }
 
   const user = await userModel.findOne({ email: req.body.email });
+  console.log('+++++login req.body', req.body);
+  console.log('-----user', user);
 
   console.log('-----req.body.password', req.body.password);
-  console.log('-----req.body.password', user.password);
 
-  if (bcrypt.compareSync(req.body.password, user.password)) {
-    res.json({ login: true, user });
+  if (user) {
+    console.log('-----user.password', user.password);
+    if (bcrypt.compareSync(req.body.password, user.password)) {
+      res.json({ login: true, user, token: user.token });
+    } else {
+      error.push('wrong password');
+      res.json({ login: false, error });
+    }
   } else {
-    res.json({ login: false });
+    error.push('wrong email');
+    res.json({ login: false, error });
   }
 
   // res.json({result, user, error, token})
 });
 
-router.post('/login', function (req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 module.exports = router;
