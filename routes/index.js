@@ -101,7 +101,7 @@ router.post('/log-in', async (req, res, next) => {
   // res.json({result, user, error, token})
 });
 
-router.post("/login", function (req, res, next) {
-  res.render("index", { title: "Express" });
+router.post('/login', function (req, res, next) {
+  res.render('index', { title: 'Express' });
 });
 module.exports = router;
