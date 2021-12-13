@@ -5,6 +5,7 @@ const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
 
 const userModel = require('../models/users');
+const stickerModel = require('../models/stickers');
 
 router.post('/sign-up', async (req, res, next) => {
   var error = [];
@@ -109,6 +110,25 @@ router.post('/log-in', async (req, res, next) => {
   }
 
   // res.json({result, user, error, token})
+});
+
+router.get('/funny', (req, res, next) => {
+  const data = userModel.findOne({
+    Categories: req.body.Categories,
+  });
+
+  const stickerSchema = new stickerModel({
+    Value: req.body.Value,
+    Categories: req.body.Categories,
+    url: req.body.url,
+    Name: req.body.Name,
+  });
+
+  console.log('req.body', req.body);
+  console.log('req.body.Value', req.body.Value);
+  console.log('req.body.categories', req.body.Categories);
+
+  res.render({ response: true });
 });
 
 module.exports = router;
