@@ -115,30 +115,36 @@ router.post('/log-in', async (req, res, next) => {
 	// res.json({result, user, error, token})
 });
 
-router.post('/add-to-favorite', async (req, res, next) => {
+router.post('/users/stickers/add-to-favorite', async (req, res, next) => {
 	const user = await userModel.findOne({ token: req.body.token });
-	const sticker = await stickerModel.findOne({ stickerId: req.body.stickerId });
+	const sticker = await stickerModel.findById(req.body.stickerId);
 	// console.log('/////user === ', user);
 	// console.log('/////sticker === ', req.body.stickerId);
+	// console.log('sticker', sticker);
 
 	user.stickers.push(sticker);
 
 	const userSaved = await user.save();
 	console.log('-----userSaved', userSaved);
 
-	res.json({});
+	res.json({ result: true });
 });
 
-router.post('/delete-from-favorite', async (req, res, next) => {
-	// const user = await userModel.findOne({ token: req.body.token });
-	// console.log('---user', user);
-	// const sticker = await stickerModel.findOne({ stickerId: req.body.stickerId });
+router.post('/users/stickers/delete-from-favorite', async (req, res, next) => {
 	const deleteSticker = await userModel.updateOne(
 		{ token: req.body.token },
 		{ $pull: { stickers: { _id: ObjectId(req.body.stickerId) } } }
 	);
 
-	res.json({});
+	res.json({ result: true });
+});
+
+router.get('/users/stickers/show-favorites', async (req, res, next) => {
+	const user = await userModel.findOne({ token: req.query.token });
+
+	console.log('///////---USER', user);
+
+	res.json({ stickers: user.stickers });
 });
 
 router.get('/categories/new', async (req, res, next) => {
