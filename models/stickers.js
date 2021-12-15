@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const stickerSchema = mongoose.Schema({
-	Value: String,
+	Value: Number,
 	Categories: String,
 	url: String,
 	Name: String,
