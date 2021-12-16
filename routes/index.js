@@ -141,6 +141,7 @@ router.post('/users/stickers/delete-from-favorite', async (req, res, next) => {
 });
 
 router.get('/users/stickers/show-favorites', async (req, res, next) => {
+	console.log('------req.query', req.query);
 	const user = await userModel.findOne({ token: req.query.token });
 
 	console.log('///////---USER', user);
